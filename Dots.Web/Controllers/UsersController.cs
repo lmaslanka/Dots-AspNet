@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using dots.database;
-using dots.models;
-using dots.viewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace Dots.Web.Controllers
+﻿namespace Dots.Web.Controllers
 {
+    using AutoMapper;
+    using dots.database;
+    using dots.models;
+    using dots.viewModels;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
     public class UsersController : Controller
     {
-        // GET: Users
+        #region Main List
+
         public ActionResult Index()
         {
             using (var db = new DotsContext())
@@ -42,6 +42,10 @@ namespace Dots.Web.Controllers
                 return View(usersViewModel);
             }
         }
+
+        #endregion
+
+        #region New User
 
         public ActionResult New()
         {
@@ -157,6 +161,196 @@ namespace Dots.Web.Controllers
                             role.CreatedOn = currentDateTime;
 
                             db.UserRoles.Add(role);
+                        }
+                    }
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+            }
+
+            return View(userVm);
+        }
+
+        #endregion
+
+        public ActionResult Edit(long? id)
+        {
+            if(id == null)
+            {
+                return View("NotFound");
+            }
+
+            using (var db = new DotsContext())
+            {
+                var username = GetUsername();
+                var user = GetUser(db, username);
+
+                if (user == null)
+                {
+                    this.ViewData["Name"] = "Anonymous";
+                    this.ViewData["IsAdministrator"] = false;
+                    this.ViewData["IsEditor"] = false;
+                    this.ViewData["IsUpdater"] = false;
+                }
+                else
+                {
+                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
+                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
+                    this.ViewData["IsEditor"] = user.IsEditor;
+                    this.ViewData["IsUpdater"] = user.IsUpdater;
+                }
+
+                var userFromDb = db.Users.FirstOrDefault(u => u.RecordId == id);
+
+                if(userFromDb == null)
+                {
+                    return View("NotFound");
+                }
+
+                var adminRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userFromDb.RecordId && ur.Role.Name == "Administrator");
+                var editorRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userFromDb.RecordId && ur.Role.Name == "Editor");
+                var updaterRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userFromDb.RecordId && ur.Role.Name == "Updater");
+
+                var userVm = mapper.Map<UserItemViewModel>(userFromDb);
+
+                userVm.IsAdministrator = (adminRole != null);
+                userVm.IsEditor = (editorRole != null);
+                userVm.IsUpdater = (updaterRole != null);
+
+                return View(userVm);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(UserItemViewModel userVm)
+        {
+            if (this.ModelState.IsValid)
+            {
+                using (var db = new DotsContext())
+                {
+                    var currentDateTime = DateTime.Now;
+                    var username = GetUsername();
+                    var user = GetUser(db, username);
+
+                    if (user == null)
+                    {
+                        this.ViewData["Name"] = "Anonymous";
+                        this.ViewData["IsAdministrator"] = false;
+                        this.ViewData["IsEditor"] = false;
+                        this.ViewData["IsUpdater"] = false;
+                    }
+                    else
+                    {
+                        this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
+                        this.ViewData["IsAdministrator"] = user.IsAdministrator;
+                        this.ViewData["IsEditor"] = user.IsEditor;
+                        this.ViewData["IsUpdater"] = user.IsUpdater;
+                    }
+
+                    var userDb = db.Users.FirstOrDefault(u => u.RecordId == userVm.RecordId);
+
+                    userDb.Username = userVm.Username;
+                    userDb.FirstName = userVm.FirstName;
+                    userDb.LastName = userVm.LastName;
+                    userDb.ModifiedBy = user.Username;
+                    userDb.ModifiedOn = currentDateTime;
+
+                    var adminRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userVm.RecordId && ur.Role.Name == "Administrator");
+                    var editorRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userVm.RecordId && ur.Role.Name == "Editor");
+                    var updaterRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userVm.RecordId && ur.Role.Name == "Updater");
+
+                    if (userVm.IsAdministrator != (adminRole != null))
+                    {
+                        if(userVm.IsAdministrator)
+                        {
+                            var role = new UserRole();
+                            var roleId = db.Roles.FirstOrDefault(r => r.Name == "Administrator")?.RecordId;
+
+                            if (roleId != null)
+                            {
+                                role.RoleId = roleId.Value;
+                                role.User = userDb;
+                                role.ModifiedBy = user.Username;
+                                role.ModifiedOn = currentDateTime;
+                                role.CreatedBy = user.Username;
+                                role.CreatedOn = currentDateTime;
+
+                                db.UserRoles.Add(role);
+                            }
+                        }
+                        else
+                        {
+                            var roleId = db.Roles.FirstOrDefault(r => r.Name == "Administrator")?.RecordId;
+
+                            if (roleId != null)
+                            {
+                                var role = db.UserRoles.FirstOrDefault(r => r.RoleId == roleId && r.UserId == userDb.RecordId);
+                                db.UserRoles.Remove(role);
+                            }
+                        }
+                    }
+
+                    if (userVm.IsEditor != (editorRole != null))
+                    {
+                        if (userVm.IsEditor)
+                        {
+                            var role = new UserRole();
+                            var roleId = db.Roles.FirstOrDefault(r => r.Name == "Editor")?.RecordId;
+
+                            if (roleId != null)
+                            {
+                                role.RoleId = roleId.Value;
+                                role.User = userDb;
+                                role.ModifiedBy = user.Username;
+                                role.ModifiedOn = currentDateTime;
+                                role.CreatedBy = user.Username;
+                                role.CreatedOn = currentDateTime;
+
+                                db.UserRoles.Add(role);
+                            }
+                        }
+                        else
+                        {
+                            var roleId = db.Roles.FirstOrDefault(r => r.Name == "Editor")?.RecordId;
+
+                            if (roleId != null)
+                            {
+                                var role = db.UserRoles.FirstOrDefault(r => r.RoleId == roleId && r.UserId == userDb.RecordId);
+                                db.UserRoles.Remove(role);
+                            }
+                        }
+                    }
+
+                    if (userVm.IsUpdater != (updaterRole != null))
+                    {
+                        if (userVm.IsUpdater)
+                        {
+                            var role = new UserRole();
+                            var roleId = db.Roles.FirstOrDefault(r => r.Name == "Updater")?.RecordId;
+
+                            if (roleId != null)
+                            {
+                                role.RoleId = roleId.Value;
+                                role.User = userDb;
+                                role.ModifiedBy = user.Username;
+                                role.ModifiedOn = currentDateTime;
+                                role.CreatedBy = user.Username;
+                                role.CreatedOn = currentDateTime;
+
+                                db.UserRoles.Add(role);
+                            }
+                        }
+                        else
+                        {
+                            var roleId = db.Roles.FirstOrDefault(r => r.Name == "Updater")?.RecordId;
+
+                            if (roleId != null)
+                            {
+                                var role = db.UserRoles.FirstOrDefault(r => r.RoleId == roleId && r.UserId == userDb.RecordId);
+                                db.UserRoles.Remove(role);
+                            }
                         }
                     }
 
