@@ -1,0 +1,181 @@
+﻿body {
+    padding-top: 65px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Carousel */
+.carousel-caption {
+    z-index: 10 !important;
+}
+
+    .carousel-caption p {
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+@media (min-width: 768px) {
+    .carousel-caption {
+        z-index: 10 !important;
+    }
+}
+
+/*
+ *
+ * NAVBAR BRAND
+ *
+ */
+.navbar-brand {
+    padding: 9px 15px 0 15px;
+}
+
+.navbar-brand-text {
+    padding: 15px 15px 15px 8px;
+}
+
+/*
+ *
+ * SPINNER
+ *
+ */
+
+.spinner {
+    display: block;
+    position: absolute;
+    left: 48%;
+    top: 350px;
+    z-index: 999;
+}
+
+.spinner-item:nth-child(1) {
+    -webkit-animation-delay: -.32s;
+    -ms-animation-delay: -.32s;
+    animation-delay: -.32s;
+}
+
+.spinner-item:nth-child(2) {
+    -webkit-animation-delay: -.16s;
+    -ms-animation-delay: -.16s;
+    animation-delay: -.16s;
+}
+
+@keyframes example {
+    from   { transform: scale(1, 1); }
+    40% { transform: scale(0, 0); }
+    to { transform: scale(1, 1); }
+}
+
+/* The element to apply the animation to */
+.spinner-item {
+    margin: 0 2px 0 2px;
+    width: 18px;
+    height: 18px;
+    position: relative;
+    border-radius: 50%;
+    background-color: rgb(102, 102, 102);
+    animation-name: example;
+    animation-duration: 1.6s;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+    animation-timing-function: ease-in-out;
+}
+
+.spinner-float-left {
+    float: left;
+}
+
+.spinner-float-left:after {
+    clear: both;
+}
+
+/*
+ *
+ * DASHBOARD LIST
+ *
+ */
+
+.outbreak-item-header {
+    border-bottom: 1px #67ba2f solid;
+    font-size: 1.3em;
+    color: #67ba2f
+}
+
+.outbreak-item {
+    height: 60px;
+    background-color: #f2f6fa;
+    margin: 8px 0 8px 0;
+    padding: 6px 8px 6px 8px;
+    border-radius: 7px;
+}
+
+.outbreak-item-resolved {
+    border-left: 3px #67ba2f solid;
+}
+
+.outbreak-item-low {
+    border-left: 3px #38b1eb solid;
+}
+
+.outbreak-item-medium {
+    border-left: 3px #f4d064 solid;
+}
+
+.outbreak-item-high {
+    border-left: 3px #f47564 solid;
+}
+
+.outbreak-item-main-text {
+    font-size: 1.2em;
+    color: #38b1eb;
+}
+
+.outbreak-item-important-text {
+    font-size: 1.2em;
+    color: #f47564;
+}
+
+.outbreak-item-normal-text {
+    font-size: 1.2em;
+    color: #67ba2f;
+}
+
+.outbreak-item-sub-text {
+    font-size: 0.95em;
+    color: #758697;
+}
+
+.outbreak-item-sub-normal-text {
+    font-size: 0.95em;
+    color: #67ba2f;
+}
+
+.outbreak-item-sub-important-text {
+    font-size: 0.95em;
+    color: #f47564;
+}
+
+.no-outbreaks-text {
+    font-size: 2em;
+    color: #aaa;
+}
+
+/*
+ * FORM CONTROLS
+ *
+ */
+.input-large {
+    width: 285px !important;
+}

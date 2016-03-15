@@ -1,0 +1,75 @@
+﻿@{
+    var actionName = ViewContext.RouteData.GetRequiredString("action");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - DOTS Application</title>
+    @Styles.Render("~/Content/kendo/css")
+    @Styles.Render("~/Content/icheck/css")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/icheck")
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">
+                    <img alt="Brand" src="~/Content/images/logo.png" width="32" height="32">
+                </a>
+                @Html.ActionLink("Outbreaks Status Report", "Index", "Home", new { area = "" }, new { @class = "navbar-brand navbar-brand-text" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="@(actionName == "Index" || actionName == "Edit" ? "active" : "")">@Html.ActionLink("Outbreaks", "Index", "Home")</li>
+                    @if (ViewBag.IsAdministrator || ViewBag.IsEditor)
+                    {
+                        <li class="@(actionName == "New" ? "active" : "")">@Html.ActionLink("New Outbreak", "New", "Home")</li>
+                    }
+                    @if (ViewBag.IsAdministrator)
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Facilities</a></li>
+                                <li><a href="#">Facility Types</a></li>
+                                <li><a href="#">Locations</a></li>
+                                <li><a href="#">Counties</a></li>
+                                <li><a href="#">Pathogens</a></li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+                <p class="nav navbar-text navbar-right">Hello, @ViewBag.Name!</p>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+
+        <br />
+        <br />
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Disease Outbreak Tracking System (DOTS) Application</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/kendo")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

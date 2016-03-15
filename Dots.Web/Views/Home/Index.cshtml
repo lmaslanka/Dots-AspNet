@@ -1,0 +1,70 @@
+﻿@model List<dots.viewModels.OutbreakListItemViewModel>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (Model.Count == 0)
+{
+    <div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-4">&nbsp;</div>
+            <div class="col-md-4 no-outbreaks-text">No Outbreaks :)</div>
+            <div class="col-md-4">&nbsp;</div>
+        </div>
+    </div>
+}
+
+@foreach (var outbreakCounty in Model)
+{
+    <div class="container">
+        <div class="row outbreak-item-header">
+            <div class="col-md-12">@outbreakCounty.County</div>
+        </div>
+    </div>
+
+    foreach(var outbreak in outbreakCounty.Outbreaks)
+    {
+        string outbreakClassName = outbreak.OutbreakLevel == "low" ? "outbreak-item-low" : outbreak.OutbreakLevel == "medium" ? "outbreak-item-medium" : outbreak.OutbreakLevel == "high" ? "outbreak-item-high" : outbreak.OutbreakLevel == "resolved" ? "outbreak-item-resolved" : "";
+        string outbreakDate = outbreak.IsOutbreakDeclaredOver ? outbreak.OutbreakDeclaredOverDate : outbreak.OutbreakDeclaredDate;
+        string admissionsClassName = !outbreak.IsAdmissionsClosed ? "outbreak-item-normal-text" : outbreak.IsAdmissionsOpened ? "outbreak-item-normal-text" : "outbreak-item-important-text";
+        string admissionsDate = outbreak.IsAdmissionsOpened ? outbreak.AdmissionsOpenDate : outbreak.IsAdmissionsClosed ? outbreak.AdmissionsCloseDate : "-";
+        string outbreakSubClassName = outbreak.IsOutbreakDeclaredOver ? "outbreak-item-sub-normal-text" : "outbreak-item-sub-text";
+        string outbreakSubDate = outbreak.IsOutbreakDeclaredOver ? "Outbreak Declared Over" : "Date Declared";
+        string admissionsSubClassName = !outbreak.IsAdmissionsClosed ? "outbreak-item-sub-normal-text" : outbreak.IsAdmissionsOpened ? "outbreak-item-sub-normal-text" : "outbreak-item-sub-important-text";
+        string admissionsSubDate = outbreak.IsAdmissionsClosed ? outbreak.IsAdmissionsOpened ? "Admissions Opened" : "Admissions Closed" : "Admissions Open";
+        string declaredText = outbreak.IsOutbreakDeclaredOver ? "Outbreak Duration" : "Since Declared";
+        bool hasRole = ViewBag.IsAdministrator || ViewBag.IsEditor || ViewBag.IsUpdater;
+        <div class="container outbreak-item @outbreakClassName">
+            <a href="@(hasRole ? Url.Action("Edit", new { id = outbreak.RecordId }) : "")">
+                <div class="row">
+                    <div class="col-md-4 outbreak-item-main-text">@outbreak.Facility</div>
+                    <div class="col-md-2 outbreak-item-main-text">@outbreakDate</div>
+                    <div class="col-md-2 @admissionsClassName">@admissionsDate</div>
+                    <div class="col-md-2 outbreak-item-main-text">@outbreak.OutbreakDurationInDays days</div>
+                    <div class="col-md-2"><span class="label label-warning">@outbreak.Pathogen</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 outbreak-item-sub-text">@outbreak.OutbreakLocation, @outbreak.FacilityType</div>
+                    <div class="col-md-2 @outbreakSubClassName">@outbreakSubDate</div>
+                    <div class="col-md-2 @admissionsSubClassName">@admissionsSubDate</div>
+                    <div class="col-md-2 outbreak-item-sub-text">@declaredText</div>
+                    <div class="col-md-2"></div>
+                </div>
+            </a>
+        </div>
+    }
+}
+
+@if (Model.Count == 0)
+{
+    <div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+    </div>
+}

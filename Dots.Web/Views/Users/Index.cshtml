@@ -1,0 +1,51 @@
+﻿@model IEnumerable<dots.viewModels.UserListItemViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Users Management</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RecordId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.RecordId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.RecordId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.RecordId })
+        </td>
+    </tr>
+}
+
+</table>
