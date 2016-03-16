@@ -30,7 +30,7 @@
                                   .DataTextField("Name")
                                   .BindTo(Model.Facilities)
                                   .HtmlAttributes(new { style = "width:95%" }))
-
+                        <br />
                         @Html.ValidationMessageFor(model => model.Facility, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                                   .DataTextField("Name")
                                   .BindTo(Model.OutbreakLocations)
                                   .HtmlAttributes(new { style = "width:65%" }))
-
+                        <br />
                         @Html.ValidationMessageFor(model => model.OutbreakLocation, "", new { @class = "text-danger" })
                     </div>
                 </div>

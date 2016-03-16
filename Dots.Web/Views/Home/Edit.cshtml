@@ -28,11 +28,11 @@
                         <div class="col-md-7">
 
                             @(Html.Kendo().AutoCompleteFor(model => model.Facility)
-                          .Filter("startswith")
-                          .DataTextField("Name")
-                          .BindTo(Model.Facilities)
-                          .HtmlAttributes(new { style = "width:95%" }))
-
+                              .Filter("startswith")
+                              .DataTextField("Name")
+                              .BindTo(Model.Facilities)
+                              .HtmlAttributes(new { style = "width:95%" }))
+                            <br />
                             @Html.ValidationMessageFor(model => model.Facility, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -45,11 +45,11 @@
                         <div class="col-md-8">
 
                             @(Html.Kendo().AutoCompleteFor(model => model.OutbreakLocation)
-                          .Filter("startswith")
-                          .DataTextField("Name")
-                          .BindTo(Model.OutbreakLocations)
-                          .HtmlAttributes(new { style = "width:65%" }))
-
+                              .Filter("startswith")
+                              .DataTextField("Name")
+                              .BindTo(Model.OutbreakLocations)
+                              .HtmlAttributes(new { style = "width:65%" }))
+                            <br />
                             @Html.ValidationMessageFor(model => model.OutbreakLocation, "", new { @class = "text-danger" })
                         </div>
                     </div>
