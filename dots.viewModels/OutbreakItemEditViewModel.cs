@@ -7,11 +7,16 @@ namespace dots.viewModels
     {
         public long RecordId { get; set; }
 
+
         [Display(Name = "Facility Name")]
+        [Required]
+        [StringLength(80, MinimumLength = 6)]
         public string Facility { get; set; }
         public List<FacilityItemViewModel> Facilities { get; set; }
 
         [Display(Name = "Outbreak Location")]
+        [Required]
+        [StringLength(80, MinimumLength = 1)]
         public string OutbreakLocation { get; set; }
         public List<OutbreakLocationItemViewModel> OutbreakLocations { get; set; }
 

@@ -29,7 +29,7 @@ namespace Dots.Web
                       "~/Content/kendo/kendo.bootstrap.min.css"));
 
             bundles.Add(new StyleBundle("~/Content/icheck/css").Include(
-                      "~/Content/square/blue.css"));
+                      "~/Content/icheck/blue.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
