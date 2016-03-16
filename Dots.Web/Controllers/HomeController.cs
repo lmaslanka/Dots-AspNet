@@ -395,62 +395,77 @@
 
         private void UpdateFacility(DotsContext db, string name, string username, DateTime currentDateTime)
         {
-            var facilities = db.Facilities.FirstOrDefault(f => f.Name.ToLower() == name.ToLower());
+            var cleanName = name?.Trim();
 
-            if (facilities == null)
+            if (!string.IsNullOrEmpty(cleanName))
             {
-                var facility = new Facility
-                {
-                    Name = name,
-                    ModifiedBy = username,
-                    ModifiedOn = currentDateTime,
-                    CreatedBy = username,
-                    CreatedOn = currentDateTime
-                };
+                var facilities = db.Facilities.FirstOrDefault(f => f.Name.ToLower() == name.ToLower());
 
-                db.Facilities.Add(facility);
-                db.SaveChanges();
+                if (facilities == null)
+                {
+                    var facility = new Facility
+                    {
+                        Name = name,
+                        ModifiedBy = username,
+                        ModifiedOn = currentDateTime,
+                        CreatedBy = username,
+                        CreatedOn = currentDateTime
+                    };
+
+                    db.Facilities.Add(facility);
+                    db.SaveChanges();
+                }
             }
         }
 
         private void UpdateOutbreakLocation(DotsContext db, string name, string username, DateTime currentDateTime)
         {
-            var locations = db.OutbreakLocations.FirstOrDefault(f => f.Name.ToLower() == name.ToLower());
+            var cleanName = name?.Trim();
 
-            if (locations == null)
+            if (!string.IsNullOrEmpty(cleanName))
             {
-                var location = new OutbreakLocation
-                {
-                    Name = name,
-                    ModifiedBy = username,
-                    ModifiedOn = currentDateTime,
-                    CreatedBy = username,
-                    CreatedOn = currentDateTime
-                };
+                var locations = db.OutbreakLocations.FirstOrDefault(f => f.Name.ToLower() == name.ToLower());
 
-                db.OutbreakLocations.Add(location);
-                db.SaveChanges();
+                if (locations == null)
+                {
+                    var location = new OutbreakLocation
+                    {
+                        Name = name,
+                        ModifiedBy = username,
+                        ModifiedOn = currentDateTime,
+                        CreatedBy = username,
+                        CreatedOn = currentDateTime
+                    };
+
+                    db.OutbreakLocations.Add(location);
+                    db.SaveChanges();
+                }
             }
         }
 
         private void UpdatePathogen(DotsContext db, string name, string username, DateTime currentDateTime)
         {
-            var pathogenClean = name.Trim().ToLower();
-            var pathogenFromDatabase = db.Pathogens.FirstOrDefault(f => f.Name.ToLower() == pathogenClean);
+            var cleanName = name?.Trim();
 
-            if (pathogenFromDatabase == null)
+            if (!string.IsNullOrEmpty(cleanName))
             {
-                var pathogenToDatabase = new Pathogen
-                {
-                    Name = pathogenClean,
-                    ModifiedBy = username,
-                    ModifiedOn = currentDateTime,
-                    CreatedBy = username,
-                    CreatedOn = currentDateTime
-                };
+                var pathogenClean = name.Trim().ToLower();
+                var pathogenFromDatabase = db.Pathogens.FirstOrDefault(f => f.Name.ToLower() == pathogenClean);
 
-                db.Pathogens.Add(pathogenToDatabase);
-                db.SaveChanges();
+                if (pathogenFromDatabase == null)
+                {
+                    var pathogenToDatabase = new Pathogen
+                    {
+                        Name = pathogenClean,
+                        ModifiedBy = username,
+                        ModifiedOn = currentDateTime,
+                        CreatedBy = username,
+                        CreatedOn = currentDateTime
+                    };
+
+                    db.Pathogens.Add(pathogenToDatabase);
+                    db.SaveChanges();
+                }
             }
         }
 
