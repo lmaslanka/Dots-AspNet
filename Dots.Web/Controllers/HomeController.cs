@@ -99,6 +99,8 @@
                     group.Outbreaks = db.Database.SqlQuery<OutbreakItemViewModel>(sql, new SqlParameter("@CountyName", group.County)).ToList();
                 }
 
+                UpdateLastUpdatedValue(db);
+
                 return View(groups);
             }
         }
@@ -138,6 +140,8 @@
                 model.FacilityTypes = GetFacilityTypes(db);
                 model.Pathogens = GetPathogens(db);
                 model.Counties = GetCounties(db);
+
+                UpdateLastUpdatedValue(db);
 
                 return View(model);
             }
@@ -184,6 +188,8 @@
                     UpdateFacility(db, outbreak.Facility, username, currentDateTime);
                     UpdateOutbreakLocation(db, outbreak.OutbreakLocation, username, currentDateTime);
                     UpdatePathogen(db, outbreak.Pathogen, username, currentDateTime);
+
+                    UpdateLastUpdatedValue(db);
                 }
 
                 return RedirectToAction("Index");
@@ -240,6 +246,8 @@
                     model.Pathogens = GetPathogens(db);
                     model.Counties = GetCounties(db);
                 }
+
+                UpdateLastUpdatedValue(db);
 
                 return View(model);
             }
@@ -298,6 +306,8 @@
                         UpdateOutbreakLocation(db, outbreak.OutbreakLocation, username, currentDateTime);
                         UpdatePathogen(db, outbreak.Pathogen, username, currentDateTime);
                     }
+
+                    UpdateLastUpdatedValue(db);
                 }
 
                 return RedirectToAction("Index");
@@ -470,6 +480,12 @@
         }
 
         #endregion
+
+        private void UpdateLastUpdatedValue(DotsContext db)
+        {
+            var lastUpdated = db.Outbreaks.OrderByDescending(o => o.ModifiedOn).Select(o => o.ModifiedOn).FirstOrDefault();
+            this.ViewData["LastUpdated"] = lastUpdated.ToShortDateString();
+        }
 
         private UserItemViewModel GetUser(DotsContext db, string username)
         {

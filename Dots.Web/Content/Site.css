@@ -179,3 +179,7 @@ textarea {
 .input-large {
     width: 285px !important;
 }
+
+.navbar-updated-text {
+    color: #67ba2f !important;
+}
