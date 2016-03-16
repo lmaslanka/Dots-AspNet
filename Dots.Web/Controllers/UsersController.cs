@@ -175,6 +175,8 @@
 
         #endregion
 
+        #region Edit User
+
         public ActionResult Edit(long? id)
         {
             if(id == null)
@@ -361,6 +363,35 @@
             }
 
             return View(userVm);
+        }
+
+        #endregion
+
+        public ActionResult Delete(long? id)
+        {
+            if (id == null)
+            {
+                return View("NotFound");
+            }
+
+            using (var db = new DotsContext())
+            {
+                var user = db.Users.FirstOrDefault(u => u.RecordId == id);
+
+                if(user == null)
+                {
+                    return View("NotFound");
+                }
+
+                var roles = db.UserRoles.Where(ur => ur.UserId == user.RecordId);
+
+                db.UserRoles.RemoveRange(roles);
+                db.Users.Remove(user);
+
+                db.SaveChanges();
+            }
+
+            return Index();
         }
 
         private UserItemViewModel GetUser(DotsContext db, string username)
