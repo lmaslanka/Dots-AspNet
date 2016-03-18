@@ -10,7 +10,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         #region Main List
 
@@ -18,24 +18,7 @@
         {
             using (var db = new DotsContext())
             {
-                var username = GetUsername();
-                var user = GetUser(db, username);
-
-                if (user == null)
-                {
-                    this.ViewData["Name"] = "Anonymous";
-                    this.ViewData["IsAdministrator"] = false;
-                    this.ViewData["IsEditor"] = false;
-                    this.ViewData["IsUpdater"] = false;
-                }
-                else
-                {
-                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                    this.ViewData["IsEditor"] = user.IsEditor;
-                    this.ViewData["IsUpdater"] = user.IsUpdater;
-                }
-
+                GetUser(db);
                 var counties = db.Outbreaks.Include("County").Select(o => o.County.Name).Distinct().ToList();
                 var groups = new List<OutbreakListItemViewModel>();
 
@@ -94,12 +77,11 @@
                                     JOIN [dbo].[Counties] As c
                                     ON o.CountyId = c.RecordId
                                     WHERE (o.IsOutbreakDeclaredOver = 0 OR DATEDIFF(dd, o.OutbreakDeclaredOverDate, GETDATE()) <= 7)
-                                    AND c.Name = @CountyName";
+                                    AND c.Name = @CountyName
+                                    ORDER BY o.Facility ASC";
 
                     group.Outbreaks = db.Database.SqlQuery<OutbreakItemViewModel>(sql, new SqlParameter("@CountyName", group.County)).ToList();
                 }
-
-                UpdateLastUpdatedValue(db);
 
                 return View(groups);
             }
@@ -113,24 +95,7 @@
         {
             using (var db = new DotsContext())
             {
-                var username = GetUsername();
-                var user = GetUser(db, username);
-
-                if (user == null)
-                {
-                    this.ViewData["Name"] = "Anonymous";
-                    this.ViewData["IsAdministrator"] = false;
-                    this.ViewData["IsEditor"] = false;
-                    this.ViewData["IsUpdater"] = false;
-                }
-                else
-                {
-                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                    this.ViewData["IsEditor"] = user.IsEditor;
-                    this.ViewData["IsUpdater"] = user.IsUpdater;
-                }
-
+                GetUser(db);
                 var model = new OutbreakItemEditViewModel();
 
                 model.OutbreakDeclaredDate = DateTime.Now;
@@ -140,8 +105,6 @@
                 model.FacilityTypes = GetFacilityTypes(db);
                 model.Pathogens = GetPathogens(db);
                 model.Counties = GetCounties(db);
-
-                UpdateLastUpdatedValue(db);
 
                 return View(model);
             }
@@ -153,43 +116,24 @@
             if (this.ModelState.IsValid)
             {
                 var currentDateTime = DateTime.Now;
-                var username = GetUsername();
 
                 using (var db = new DotsContext())
                 {
-                    var user = GetUser(db, username);
-
-                    if (user == null)
-                    {
-                        this.ViewData["Name"] = "Anonymous";
-                        this.ViewData["IsAdministrator"] = false;
-                        this.ViewData["IsEditor"] = false;
-                        this.ViewData["IsUpdater"] = false;
-                    }
-                    else
-                    {
-                        this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                        this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                        this.ViewData["IsEditor"] = user.IsEditor;
-                        this.ViewData["IsUpdater"] = user.IsUpdater;
-                    }
-
+                    var user = GetUser(db);
                     var outbreakItem = this.mapper.Map<Outbreak>(outbreak);
 
                     outbreakItem.IsOutbreakDeclared = true;
-                    outbreakItem.ModifiedBy = username;
+                    outbreakItem.ModifiedBy = user.Username;
                     outbreakItem.ModifiedOn = currentDateTime;
-                    outbreakItem.CreatedBy = username;
+                    outbreakItem.CreatedBy = user.Username;
                     outbreakItem.CreatedOn = currentDateTime;
                     
                     db.Outbreaks.Add(outbreakItem);
                     db.SaveChanges();
 
-                    UpdateFacility(db, outbreak.Facility, username, currentDateTime);
-                    UpdateOutbreakLocation(db, outbreak.OutbreakLocation, username, currentDateTime);
-                    UpdatePathogen(db, outbreak.Pathogen, username, currentDateTime);
-
-                    UpdateLastUpdatedValue(db);
+                    UpdateFacility(db, outbreak.Facility, user.Username, currentDateTime);
+                    UpdateOutbreakLocation(db, outbreak.OutbreakLocation, user.Username, currentDateTime);
+                    UpdatePathogen(db, outbreak.Pathogen, user.Username, currentDateTime);
                 }
 
                 return RedirectToAction("Index");
@@ -211,24 +155,7 @@
 
             using (var db = new DotsContext())
             {
-                var username = GetUsername();
-                var user = GetUser(db, username);
-
-                if (user == null)
-                {
-                    this.ViewData["Name"] = "Anonymous";
-                    this.ViewData["IsAdministrator"] = false;
-                    this.ViewData["IsEditor"] = false;
-                    this.ViewData["IsUpdater"] = false;
-                }
-                else
-                {
-                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                    this.ViewData["IsEditor"] = user.IsEditor;
-                    this.ViewData["IsUpdater"] = user.IsUpdater;
-                }
-
+                var user = GetUser(db);
                 OutbreakItemEditViewModel model = null;
                 var outbreak = db.Outbreaks.FirstOrDefault(o => o.RecordId == id);
 
@@ -247,8 +174,6 @@
                     model.Counties = GetCounties(db);
                 }
 
-                UpdateLastUpdatedValue(db);
-
                 return View(model);
             }
         }
@@ -259,27 +184,10 @@
             if (this.ModelState.IsValid)
             {
                 var currentDateTime = DateTime.Now;
-                var username = GetUsername();
 
                 using (var db = new DotsContext())
                 {
-                    var user = GetUser(db, username);
-
-                    if (user == null)
-                    {
-                        this.ViewData["Name"] = "Anonymous";
-                        this.ViewData["IsAdministrator"] = false;
-                        this.ViewData["IsEditor"] = false;
-                        this.ViewData["IsUpdater"] = false;
-                    }
-                    else
-                    {
-                        this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                        this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                        this.ViewData["IsEditor"] = user.IsEditor;
-                        this.ViewData["IsUpdater"] = user.IsUpdater;
-                    }
-
+                    var user = GetUser(db);
                     var outbreakItem = db.Outbreaks.FirstOrDefault(o => o.RecordId == outbreak.RecordId);
 
                     if (outbreakItem != null)
@@ -297,17 +205,15 @@
                         outbreakItem.AdmissionsCloseDate = outbreak.AdmissionsCloseDate;
                         outbreakItem.AdmissionsOpenDate = outbreak.AdmissionsOpenDate;
                         outbreakItem.Pathogen = outbreak.Pathogen;
-                        outbreakItem.ModifiedBy = username;
+                        outbreakItem.ModifiedBy = user.Username;
                         outbreakItem.ModifiedOn = currentDateTime;
 
                         db.SaveChanges();
 
-                        UpdateFacility(db, outbreak.Facility, username, currentDateTime);
-                        UpdateOutbreakLocation(db, outbreak.OutbreakLocation, username, currentDateTime);
-                        UpdatePathogen(db, outbreak.Pathogen, username, currentDateTime);
+                        UpdateFacility(db, outbreak.Facility, user.Username, currentDateTime);
+                        UpdateOutbreakLocation(db, outbreak.OutbreakLocation, user.Username, currentDateTime);
+                        UpdatePathogen(db, outbreak.Pathogen, user.Username, currentDateTime);
                     }
-
-                    UpdateLastUpdatedValue(db);
                 }
 
                 return RedirectToAction("Index");
@@ -480,43 +386,6 @@
         }
 
         #endregion
-
-        private void UpdateLastUpdatedValue(DotsContext db)
-        {
-            var lastUpdated = db.Outbreaks.OrderByDescending(o => o.ModifiedOn).Select(o => o.ModifiedOn).FirstOrDefault();
-            this.ViewData["LastUpdated"] = lastUpdated.ToShortDateString();
-        }
-
-        private UserItemViewModel GetUser(DotsContext db, string username)
-        {
-            var user = db.Users.FirstOrDefault(u => u.Username == username);
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            var adminRole = db.UserRoles.Include("Role").Include("User").FirstOrDefault(ur => ur.User.Username == username && ur.Role.Name == "Administrator");
-            var editorRole = db.UserRoles.Include("Role").Include("User").FirstOrDefault(ur => ur.User.Username == username && ur.Role.Name == "Editor");
-            var updaterRole = db.UserRoles.Include("Role").Include("User").FirstOrDefault(ur => ur.User.Username == username && ur.Role.Name == "Updater");
-
-            var userVm = new UserItemViewModel();
-
-            userVm.RecordId = user.RecordId;
-            userVm.Username = user.Username;
-            userVm.FirstName = user.FirstName;
-            userVm.LastName = user.LastName;
-            userVm.IsAdministrator = adminRole != null;
-            userVm.IsEditor = editorRole != null;
-            userVm.IsUpdater = updaterRole != null;
-
-            return userVm;
-        }
-
-        private string GetUsername()
-        {
-            return this.User.Identity.IsAuthenticated ? this.User.Identity.Name.Replace(@"ACCOUNTS\", "") : "Anonymous";
-        }
 
         public HomeController()
         {

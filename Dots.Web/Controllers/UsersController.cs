@@ -9,7 +9,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         #region Main List
 
@@ -17,26 +17,8 @@
         {
             using (var db = new DotsContext())
             {
-                var username = GetUsername();
-                var user = GetUser(db, username);
-
-                if (user == null)
-                {
-                    this.ViewData["Name"] = "Anonymous";
-                    this.ViewData["IsAdministrator"] = false;
-                    this.ViewData["IsEditor"] = false;
-                    this.ViewData["IsUpdater"] = false;
-                }
-                else
-                {
-                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                    this.ViewData["IsEditor"] = user.IsEditor;
-                    this.ViewData["IsUpdater"] = user.IsUpdater;
-                }
-
+                GetUser(db);
                 var usersFromDb = db.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName).ToList();
-
                 var usersViewModel = mapper.Map<List<UserListItemViewModel>>(usersFromDb);
 
                 return View(usersViewModel);
@@ -51,24 +33,7 @@
         {
             using (var db = new DotsContext())
             {
-                var username = GetUsername();
-                var user = GetUser(db, username);
-
-                if (user == null)
-                {
-                    this.ViewData["Name"] = "Anonymous";
-                    this.ViewData["IsAdministrator"] = false;
-                    this.ViewData["IsEditor"] = false;
-                    this.ViewData["IsUpdater"] = false;
-                }
-                else
-                {
-                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                    this.ViewData["IsEditor"] = user.IsEditor;
-                    this.ViewData["IsUpdater"] = user.IsUpdater;
-                }
-
+                GetUser(db);
                 var userVm = new UserItemViewModel();
 
                 return View(userVm);
@@ -83,24 +48,7 @@
                 using (var db = new DotsContext())
                 {
                     var currentDateTime = DateTime.Now;
-                    var username = GetUsername();
-                    var user = GetUser(db, username);
-
-                    if (user == null)
-                    {
-                        this.ViewData["Name"] = "Anonymous";
-                        this.ViewData["IsAdministrator"] = false;
-                        this.ViewData["IsEditor"] = false;
-                        this.ViewData["IsUpdater"] = false;
-                    }
-                    else
-                    {
-                        this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                        this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                        this.ViewData["IsEditor"] = user.IsEditor;
-                        this.ViewData["IsUpdater"] = user.IsUpdater;
-                    }
-
+                    var user = GetUser(db);
                     var userDb = mapper.Map<User>(userVm);
 
                     userDb.ModifiedBy = user.Username;
@@ -186,24 +134,7 @@
 
             using (var db = new DotsContext())
             {
-                var username = GetUsername();
-                var user = GetUser(db, username);
-
-                if (user == null)
-                {
-                    this.ViewData["Name"] = "Anonymous";
-                    this.ViewData["IsAdministrator"] = false;
-                    this.ViewData["IsEditor"] = false;
-                    this.ViewData["IsUpdater"] = false;
-                }
-                else
-                {
-                    this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                    this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                    this.ViewData["IsEditor"] = user.IsEditor;
-                    this.ViewData["IsUpdater"] = user.IsUpdater;
-                }
-
+                GetUser(db);
                 var userFromDb = db.Users.FirstOrDefault(u => u.RecordId == id);
 
                 if(userFromDb == null)
@@ -233,24 +164,7 @@
                 using (var db = new DotsContext())
                 {
                     var currentDateTime = DateTime.Now;
-                    var username = GetUsername();
-                    var user = GetUser(db, username);
-
-                    if (user == null)
-                    {
-                        this.ViewData["Name"] = "Anonymous";
-                        this.ViewData["IsAdministrator"] = false;
-                        this.ViewData["IsEditor"] = false;
-                        this.ViewData["IsUpdater"] = false;
-                    }
-                    else
-                    {
-                        this.ViewData["Name"] = $"{user.FirstName} {user.LastName}";
-                        this.ViewData["IsAdministrator"] = user.IsAdministrator;
-                        this.ViewData["IsEditor"] = user.IsEditor;
-                        this.ViewData["IsUpdater"] = user.IsUpdater;
-                    }
-
+                    var user = GetUser(db);
                     var userDb = db.Users.FirstOrDefault(u => u.RecordId == userVm.RecordId);
 
                     userDb.Username = userVm.Username;
@@ -367,6 +281,8 @@
 
         #endregion
 
+        #region Delete User
+
         public ActionResult Delete(long? id)
         {
             if (id == null)
@@ -376,54 +292,47 @@
 
             using (var db = new DotsContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.RecordId == id);
+                var user = GetUser(db);
+                var userFromDb = db.Users.FirstOrDefault(u => u.RecordId == id);
 
-                if(user == null)
+                if (userFromDb == null)
                 {
                     return View("NotFound");
                 }
 
-                var roles = db.UserRoles.Where(ur => ur.UserId == user.RecordId);
+                var adminRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userFromDb.RecordId && ur.Role.Name == "Administrator");
+                var editorRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userFromDb.RecordId && ur.Role.Name == "Editor");
+                var updaterRole = db.UserRoles.Include("Role").FirstOrDefault(ur => ur.UserId == userFromDb.RecordId && ur.Role.Name == "Updater");
 
-                db.UserRoles.RemoveRange(roles);
-                db.Users.Remove(user);
+                var userVm = this.mapper.Map<UserItemViewModel>(userFromDb);
+
+                userVm.IsAdministrator = (adminRole != null);
+                userVm.IsEditor = (editorRole != null);
+                userVm.IsUpdater = (updaterRole != null);
+
+                return View(userVm);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete(UserItemViewModel userVm)
+        {
+            using (var db = new DotsContext())
+            {
+                GetUser(db);
+                var userDb = db.Users.FirstOrDefault(u => u.RecordId == userVm.RecordId);
+                var userRolesDb = db.UserRoles.Where(ur => ur.UserId == userVm.RecordId);
+
+                db.UserRoles.RemoveRange(userRolesDb);
+                db.Users.Remove(userDb);
 
                 db.SaveChanges();
+
+                return RedirectToAction("Index");
             }
-
-            return Index();
         }
 
-        private UserItemViewModel GetUser(DotsContext db, string username)
-        {
-            var user = db.Users.FirstOrDefault(u => u.Username == username);
-            
-            if (user == null)
-            {
-                return null;
-            }
-
-            var adminRole = db.UserRoles.Include("Role").Include("User").FirstOrDefault(ur => ur.User.Username == username && ur.Role.Name == "Administrator");
-            var editorRole = db.UserRoles.Include("Role").Include("User").FirstOrDefault(ur => ur.User.Username == username && ur.Role.Name == "Editor");
-            var updaterRole = db.UserRoles.Include("Role").Include("User").FirstOrDefault(ur => ur.User.Username == username && ur.Role.Name == "Updater");
-
-            var userVm = new UserItemViewModel();
-
-            userVm.RecordId = user.RecordId;
-            userVm.Username = user.Username;
-            userVm.FirstName = user.FirstName;
-            userVm.LastName = user.LastName;
-            userVm.IsAdministrator = adminRole != null;
-            userVm.IsEditor = editorRole != null;
-            userVm.IsUpdater = updaterRole != null;
-
-            return userVm;
-        }
-
-        private string GetUsername()
-        {
-            return this.User.Identity.IsAuthenticated ? this.User.Identity.Name.Replace(@"ACCOUNTS\", "") : "Anonymous";
-        }
+        #endregion
 
         public UsersController()
         {

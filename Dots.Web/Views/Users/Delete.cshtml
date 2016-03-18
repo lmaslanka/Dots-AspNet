@@ -1,0 +1,79 @@
+﻿@model dots.viewModels.UserItemViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this user?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsAdministrator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsAdministrator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsEditor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsEditor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsUpdater)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsUpdater)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.RecordId)
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
