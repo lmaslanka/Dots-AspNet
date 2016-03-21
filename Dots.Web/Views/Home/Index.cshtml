@@ -41,18 +41,18 @@
         <div class="container outbreak-item @outbreakClassName">
             <a href="@(hasRole ? Url.Action("Edit", new { id = outbreak.RecordId }) : "")">
                 <div class="row">
-                    <div class="col-md-4 outbreak-item-main-text">@outbreak.Facility</div>
-                    <div class="col-md-2 outbreak-item-main-text">@outbreakDate</div>
-                    <div class="col-md-2 @admissionsClassName">@admissionsDate</div>
-                    <div class="col-md-2 outbreak-item-main-text">@outbreak.OutbreakDurationInDays days</div>
-                    <div class="col-md-2"><span class="label label-warning">@outbreak.Pathogen</span></div>
+                    <div class="col-sm-6 col-md-4 outbreak-item-main-text">@outbreak.Facility</div>
+                    <div class="hidden-sm col-md-2 outbreak-item-main-text">@outbreakDate</div>
+                    <div class="col-sm-6 col-md-2 @admissionsClassName">@admissionsDate</div>
+                    <div class="hidden-sm col-md-2 outbreak-item-main-text">@outbreak.OutbreakDurationInDays days</div>
+                    <div class="hidden-sm col-md-2"><span class="label label-warning">@outbreak.Pathogen</span></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 outbreak-item-sub-text">@outbreak.OutbreakLocation, @outbreak.FacilityType</div>
-                    <div class="col-md-2 @outbreakSubClassName">@outbreakSubDate</div>
-                    <div class="col-md-2 @admissionsSubClassName">@admissionsSubDate</div>
-                    <div class="col-md-2 outbreak-item-sub-text">@declaredText</div>
-                    <div class="col-md-2"></div>
+                    <div class="col-sm-6 col-md-4 outbreak-item-sub-text">@outbreak.OutbreakLocation, @outbreak.FacilityType</div>
+                    <div class="hidden-sm col-md-2 @outbreakSubClassName">@outbreakSubDate</div>
+                    <div class="col-sm-6 col-md-2 @admissionsSubClassName">@admissionsSubDate</div>
+                    <div class="hidden-sm col-md-2 outbreak-item-sub-text">@declaredText</div>
+                    <div class="hidden-sm col-md-2"></div>
                 </div>
             </a>
         </div>
