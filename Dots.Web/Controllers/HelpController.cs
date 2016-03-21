@@ -14,5 +14,15 @@
                 return View();
             }
         }
+
+        public ActionResult Updater()
+        {
+            using (var db = new DotsContext())
+            {
+                GetUser(db);
+
+                return View();
+            }
+        }
     }
 }
