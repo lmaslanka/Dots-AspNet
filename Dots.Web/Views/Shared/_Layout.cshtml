@@ -27,7 +27,7 @@
                 <a class="navbar-brand">
                     <img alt="Brand" src="~/Content/images/logo.png" width="32" height="32">
                 </a>
-                @Html.ActionLink("Outbreaks Status Report", "Index", "Home", new { area = "" }, new { @class = "navbar-brand navbar-brand-text" })
+                @Html.ActionLink("Outbreaks Status Report", "Index", "Home", new { area = "" }, new { @class = "navbar-brand navbar-brand-text hidden-sm" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -51,7 +51,7 @@
                 <p class="nav navbar-text navbar-right navbar-updated-text">Last Updated @ViewBag.LastUpdated</p>
                 @if (ViewBag.Name != "Anonymous")
                 {
-                    <p class="nav navbar-text navbar-right">Hello, @ViewBag.Name!</p>
+                    <p class="nav navbar-text navbar-right hidden-sm hidden-xs">Hello, @ViewBag.Name!</p>
                 }
             </div>
         </div>
