@@ -24,5 +24,15 @@
                 return View();
             }
         }
+
+        public ActionResult Editor()
+        {
+            using (var db = new DotsContext())
+            {
+                GetUser(db);
+
+                return View();
+            }
+        }
     }
 }

@@ -204,6 +204,8 @@
     <Content Include="Content\images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\images\new_outbreak.png" />
+    <Content Include="Content\images\outbreak_declared_over.png" />
     <Content Include="Content\images\outbreak_list.png" />
     <Content Include="Content\images\outbreak_list_item.png" />
     <Content Include="Content\kendo\Black\editor.png" />
@@ -1481,6 +1483,7 @@
     <Content Include="Views\Facility\Delete.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Views\Help\Updater.cshtml" />
+    <Content Include="Views\Help\Editor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
