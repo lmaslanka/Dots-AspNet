@@ -1,5 +1,6 @@
 ﻿@{
     var actionName = ViewContext.RouteData.GetRequiredString("action");
+    var controllerName = ViewContext.RouteData.GetRequiredString("controller");
 }
 
 <!DOCTYPE html>
@@ -31,14 +32,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="@(actionName == "Index" || actionName == "Edit" ? "active" : "")">@Html.ActionLink("Outbreaks", "Index", "Home")</li>
+                    <li class="@((actionName == "Index" && controllerName == "Home") || (actionName == "Edit" && controllerName == "Home") ? "active" : "")">@Html.ActionLink("Outbreaks", "Index", "Home")</li>
                     @if (ViewBag.IsAdministrator || ViewBag.IsEditor)
                     {
-                        <li class="@(actionName == "New" ? "active" : "")">@Html.ActionLink("New Outbreak", "New", "Home")</li>
+                        <li class="@((actionName == "New" && controllerName == "Home") ? "active" : "")">@Html.ActionLink("New Outbreak", "New", "Home")</li>
                     }
                     @if (ViewBag.IsAdministrator)
                     {
-                        <li class="dropdown">
+                        <li class="dropdown @(controllerName == "Users" || controllerName == "Facility" ? "active" : "")">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Users", "Index", "Users")</li>
