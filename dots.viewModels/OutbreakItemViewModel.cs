@@ -1,5 +1,7 @@
 ﻿namespace dots.viewModels
 {
+    using System;
+
     public class OutbreakItemViewModel
     {
         public long RecordId { get; set; }
