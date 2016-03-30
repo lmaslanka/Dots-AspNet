@@ -70,7 +70,26 @@
                                     CASE o.IsOutbreakDeclaredOver
 	                                    WHEN 0 THEN DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
 	                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
-                                    END
+                                    END,
+                                    IsCommentPresent = 
+	                                    CASE LEN(o.Comment)
+		                                    WHEN 0 THEN CAST(0 As BIT)
+		                                    ELSE CAST(1 As BIT) 
+	                                END,
+	                                LastUpdated = 
+	                                CASE
+		                                WHEN DATEDIFF(ss, o.ModifiedOn, GETDATE()) <= 45 THEN 'updated a few seconds ago'
+		                                WHEN DATEDIFF(ss, o.ModifiedOn, GETDATE()) > 45 AND DATEDIFF(ss, o.ModifiedOn, GETDATE()) <= 90 THEN 'updated a minute ago'
+		                                WHEN DATEDIFF(ss, o.ModifiedOn, GETDATE()) > 90 AND DATEDIFF(mi, o.ModifiedOn, GETDATE()) <= 45 THEN 'updated ' + CAST(DATEDIFF(mi, o.ModifiedOn, GETDATE()) As varchar(20)) + ' minutes ago'
+		                                WHEN DATEDIFF(mi, o.ModifiedOn, GETDATE()) > 45 AND DATEDIFF(mi, o.ModifiedOn, GETDATE()) <= 90 THEN 'updated an hour ago'
+		                                WHEN DATEDIFF(mi, o.ModifiedOn, GETDATE()) > 90 AND DATEDIFF(hh, o.ModifiedOn, GETDATE()) <= 22 THEN 'updated ' + CAST(DATEDIFF(hh, o.ModifiedOn, GETDATE()) As varchar(20)) + ' hours ago'
+		                                WHEN DATEDIFF(hh, o.ModifiedOn, GETDATE()) > 22 AND DATEDIFF(hh, o.ModifiedOn, GETDATE()) <= 36 THEN 'updated a day ago'
+		                                WHEN DATEDIFF(hh, o.ModifiedOn, GETDATE()) > 36 AND DATEDIFF(dd, o.ModifiedOn, GETDATE()) <= 25 THEN 'updated ' + CAST(DATEDIFF(dd, o.ModifiedOn, GETDATE()) As varchar(20)) + ' days ago'
+		                                WHEN DATEDIFF(dd, o.ModifiedOn, GETDATE()) > 25 AND DATEDIFF(dd, o.ModifiedOn, GETDATE()) <= 45 THEN 'updated a month ago'
+		                                WHEN DATEDIFF(dd, o.ModifiedOn, GETDATE()) > 45 AND DATEDIFF(dd, o.ModifiedOn, GETDATE()) <= 345 THEN 'updated ' + CAST(DATEDIFF(mm, o.ModifiedOn, GETDATE()) As varchar(20)) + ' months ago'
+		                                WHEN DATEDIFF(dd, o.ModifiedOn, GETDATE()) > 345 AND DATEDIFF(dd, o.ModifiedOn, GETDATE()) <= 545 THEN 'updated a year ago'
+		                                WHEN DATEDIFF(dd, o.ModifiedOn, GETDATE()) > 545 THEN 'updated ' + CAST(DATEDIFF(yy, o.ModifiedOn, GETDATE()) As varchar(20)) + ' years ago'
+	                                END
                                     FROM [dbo].[Outbreaks] As o
                                     JOIN [dbo].[FacilityTypes] As ft
                                     ON o.FacilityTypeId = ft.RecordId

@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    foreach(var outbreak in outbreakCounty.Outbreaks)
+    foreach (var outbreak in outbreakCounty.Outbreaks)
     {
         string outbreakClassName = outbreak.OutbreakLevel == "low" ? "outbreak-item-low" : outbreak.OutbreakLevel == "medium" ? "outbreak-item-medium" : outbreak.OutbreakLevel == "high" ? "outbreak-item-high" : outbreak.OutbreakLevel == "resolved" ? "outbreak-item-resolved" : "";
         string outbreakDate = outbreak.IsOutbreakDeclaredOver ? outbreak.OutbreakDeclaredOverDate : outbreak.OutbreakDeclaredDate;
@@ -48,11 +48,17 @@
                     <div class="hidden-sm hidden-xs col-md-2"><span class="label label-warning">@outbreak.Pathogen</span></div>
                 </div>
                 <div class="row">
-                    <div class="hidden-xs col-sm-6 col-md-4 outbreak-item-sub-text">@outbreak.OutbreakLocation, @outbreak.FacilityType</div>
+                    <div class="hidden-xs col-sm-6 col-md-4 outbreak-item-sub-text">
+                        @outbreak.OutbreakLocation, @outbreak.FacilityType
+                        @if (outbreak.IsCommentPresent)
+                        {
+                            <span class="label label-primary comment-label-size">Comment</span>
+                        }
+                    </div>
                     <div class="hidden-sm hidden-xs col-md-2 @outbreakSubClassName">@outbreakSubDate</div>
                     <div class="col-xs-12 col-sm-6 col-md-2 @admissionsSubClassName">@admissionsSubDate</div>
                     <div class="hidden-sm hidden-xs col-md-2 outbreak-item-sub-text">@declaredText</div>
-                    <div class="hidden-sm hidden-xs col-md-2"></div>
+                    <div class="hidden-sm hidden-xs col-md-2 date-style">@outbreak.LastUpdated</div>
                 </div>
             </a>
         </div>

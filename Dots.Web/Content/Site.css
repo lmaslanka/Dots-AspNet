@@ -205,3 +205,13 @@ textarea {
 .character-count-value-red {
     color: #f47564;
 }
+
+.date-style {
+    color: #aaa;
+    font-size: 0.95em;
+}
+
+.comment-label-size {
+    font-size: 0.65em;
+    margin: 0 0 0 6px;
+}

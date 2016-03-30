@@ -20,5 +20,7 @@
         public string County { get; set; }
         public string OutbreakLevel { get; set; }
         public int OutbreakDurationInDays { get; set; }
+        public bool IsCommentPresent { get; set; }
+        public string LastUpdated { get; set; }
     }
 }
