@@ -56,7 +56,13 @@
                         }
                     </div>
                     <div class="hidden-sm hidden-xs col-md-2 @outbreakSubClassName">@outbreakSubDate</div>
-                    <div class="col-xs-12 col-sm-6 col-md-2 @admissionsSubClassName">@admissionsSubDate</div>
+                    <div class="col-xs-12 col-sm-6 col-md-2 @admissionsSubClassName">
+                        @admissionsSubDate
+                        @if (outbreak.IsCommentPresent)
+                        {
+                            <span class="label label-primary comment-label-size hidden-sm hidden-md hidden-lg">Comment</span>
+                        }
+                    </div>
                     <div class="hidden-sm hidden-xs col-md-2 outbreak-item-sub-text">@declaredText</div>
                     <div class="hidden-sm hidden-xs col-md-2 date-style">@outbreak.LastUpdated</div>
                 </div>
