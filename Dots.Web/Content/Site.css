@@ -183,3 +183,25 @@ textarea {
 .navbar-updated-text {
     color: #67ba2f !important;
 }
+
+.text-area-custom {
+    max-width: 500px !important;
+    width: 500px !important;
+}
+
+.character-count {
+    font-weight: bold;
+    color: #777;
+}
+
+.character-count-value-green {
+    color: #67ba2f;
+}
+
+.character-count-value-yellow {
+    color: #f4d064;
+}
+
+.character-count-value-red {
+    color: #f47564;
+}

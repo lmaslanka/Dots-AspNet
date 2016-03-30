@@ -20,6 +20,7 @@
         public DateTime AdmissionsCloseDate { get; set; }
         public DateTime AdmissionsOpenDate { get; set; }
         public string Pathogen { get; set; }
+        public string Comment { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string CreatedBy { get; set; }

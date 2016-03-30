@@ -205,6 +205,7 @@
                         outbreakItem.AdmissionsCloseDate = outbreak.AdmissionsCloseDate;
                         outbreakItem.AdmissionsOpenDate = outbreak.AdmissionsOpenDate;
                         outbreakItem.Pathogen = outbreak.Pathogen;
+                        outbreakItem.Comment = outbreak.Comment;
                         outbreakItem.ModifiedBy = user.Username;
                         outbreakItem.ModifiedOn = currentDateTime;
 

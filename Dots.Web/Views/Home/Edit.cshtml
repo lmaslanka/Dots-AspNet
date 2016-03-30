@@ -96,27 +96,27 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="col-md-5">
-                            @Html.LabelFor(model => model.CountyId, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.CountyId, htmlAttributes: new {@class = "control-label"})
                         </div>
                         <div class="col-md-7">
 
                             @(Html.Kendo().DropDownListFor(model => model.CountyId)
-                          .DataTextField("Name")
-                          .DataValueField("RecordId")
-                          .BindTo(Model.Counties))
+                                  .DataTextField("Name")
+                                  .DataValueField("RecordId")
+                                  .BindTo(Model.Counties))
 
-                            @Html.ValidationMessageFor(model => model.CountyId, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.CountyId, "", new {@class = "text-danger"})
                         </div>
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
                         <div class="col-md-4">
-                            @Html.LabelFor(model => model.OutbreakDeclaredDate, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.OutbreakDeclaredDate, htmlAttributes: new {@class = "control-label"})
                         </div>
                         <div class="col-md-8">
                             @Html.Kendo().DatePickerFor(model => model.OutbreakDeclaredDate)
-                            @Html.ValidationMessageFor(model => model.OutbreakDeclaredDate, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.OutbreakDeclaredDate, "", new {@class = "text-danger"})
                         </div>
                     </div>
                 </div>
@@ -207,7 +207,54 @@
             </div>
         </div>
 
-        <br />
+    @if (ViewBag.IsAdministrator || ViewBag.IsEditor)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.Comment, htmlAttributes: new {@class = "control-label"})
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.TextAreaFor(model => model.Comment, 5, 100, new {@class = "text-area-custom"})
+                        <div id="character-count" class="character-count"></div>
+                        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.DisplayTextFor(model => model.Comment)
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <br />
         <div class="row">
             <div class="col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />&nbsp;&nbsp;
@@ -279,6 +326,23 @@
                     $('#AdmissionsOpenDateGroup').hide();
                 }
             });
+
+            updateCount();
+
+            $('#Comment').keyup(updateCount);
+
+            function updateCount() {
+                var count = $('#Comment').val().length;
+
+                if (count < 150) {
+                    $('#character-count').html('Available Characters: <span class="character-count-value-green">' + (200 - count) + '</span>');
+                } else if (count >= 150 && count <= 199) {
+                    $('#character-count').html('Available Characters: <span class="character-count-value-yellow">' + (200 - count) + '</span>');
+                } else if (count >= 200) {
+                    $('#character-count').html('Available Characters: <span class="character-count-value-red">' + (200 - count) + '</span>');
+                }
+            }
+
         });
     </script>
 

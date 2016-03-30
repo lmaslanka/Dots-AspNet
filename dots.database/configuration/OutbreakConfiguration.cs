@@ -68,6 +68,12 @@
                 .HasMaxLength(80)
                 .HasColumnOrder(++index);
 
+            Property(evt => evt.Comment)
+                .IsOptional()
+                .HasColumnType("nvarchar")
+                .HasMaxLength(200)
+                .HasColumnOrder(++index);
+
             Property(evt => evt.ModifiedBy)
                 .HasColumnType("nvarchar")
                 .HasMaxLength(80)

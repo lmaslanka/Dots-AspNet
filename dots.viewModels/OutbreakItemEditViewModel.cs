@@ -54,5 +54,9 @@ namespace dots.viewModels
         [Display(Name = "County")]
         public long CountyId { get; set; }
         public List<CountyItemViewModel> Counties { get; set; }
+
+        [Display(Name = "Comments")]
+        [StringLength(200)]
+        public string Comment { get; set; }
     }
 }
