@@ -215,3 +215,8 @@ textarea {
     font-size: 0.65em;
     margin: 0 0 0 6px;
 }
+
+.text-no-comment {
+    font-size: 0.95em;
+    color: #777777;
+}

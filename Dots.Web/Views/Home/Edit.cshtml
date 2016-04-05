@@ -121,6 +121,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            @Html.LabelFor(model => model.IsOutbreakDeclaredOver, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.EditorFor(model => model.IsOutbreakDeclaredOver)
+                            @Html.ValidationMessageFor(model => model.IsOutbreakDeclaredOver, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group" id="OutbreakDeclaredOverDateGroup">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.OutbreakDeclaredOverDate, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-8">
+                            @Html.Kendo().DatePickerFor(model => model.OutbreakDeclaredOverDate)
+                            @Html.ValidationMessageFor(model => model.OutbreakDeclaredOverDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
         else
         {
@@ -130,32 +155,8 @@
             @Html.HiddenFor(model => model.Pathogen)
             @Html.HiddenFor(model => model.CountyId)
             @Html.HiddenFor(model => model.OutbreakDeclaredDate)
+            @Html.HiddenFor(model => model.OutbreakDeclaredOverDate)
         }
-
-        <div class="row">
-            <div class="col-md-5">
-                <div class="form-group">
-                    <div class="col-md-5">
-                        @Html.LabelFor(model => model.IsOutbreakDeclaredOver, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-7">
-                        @Html.EditorFor(model => model.IsOutbreakDeclaredOver)
-                        @Html.ValidationMessageFor(model => model.IsOutbreakDeclaredOver, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-7">
-                <div class="form-group" id="OutbreakDeclaredOverDateGroup">
-                    <div class="col-md-4">
-                        @Html.LabelFor(model => model.OutbreakDeclaredOverDate, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-8">
-                        @Html.Kendo().DatePickerFor(model => model.OutbreakDeclaredOverDate)
-                        @Html.ValidationMessageFor(model => model.OutbreakDeclaredOverDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-md-5">
@@ -235,21 +236,21 @@
     {
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-12">
-                        @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label" })
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Comments</h4>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-12">
-                        @Html.DisplayTextFor(model => model.Comment)
+                    <div class="panel-body">
+                        @if (string.IsNullOrEmpty(Model.Comment))
+                        {
+                            <div class="text-no-comment">-- No Comment Entered --</div>
+                        }
+                        else
+                        {
+                            @Html.DisplayTextFor(model => model.Comment)
+                        }
                     </div>
-                </div>
+                </div>                        
             </div>
         </div>
     }

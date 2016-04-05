@@ -72,8 +72,9 @@
 	                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
                                     END,
                                     IsCommentPresent = 
-	                                    CASE LEN(o.Comment)
-		                                    WHEN 0 THEN CAST(0 As BIT)
+	                                    CASE
+                                            WHEN LEN(o.Comment) IS NULL THEN CAST(0 As BIT)
+		                                    WHEN LEN(o.Comment) = 0 THEN CAST(0 As BIT)
 		                                    ELSE CAST(1 As BIT) 
 	                                END,
 	                                LastUpdated = 
