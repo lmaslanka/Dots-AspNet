@@ -53,23 +53,23 @@
 	                                    WHEN o.IsOutbreakDeclaredOver = 1 THEN 'resolved'
 	                                    WHEN (CASE o.IsOutbreakDeclaredOver
 			                                    WHEN 0 THEN DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
-			                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
+			                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, o.OutbreakDeclaredOverDate)
 		                                    END) <= 15 THEN 'low'
 	                                    WHEN (CASE o.IsOutbreakDeclaredOver
 			                                    WHEN 0 THEN DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
-			                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
+			                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, o.OutbreakDeclaredOverDate)
 		                                    END) > 15 
 		                                    AND
 		                                    (CASE o.IsOutbreakDeclaredOver
 			                                    WHEN 0 THEN DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
-			                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
+			                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, o.OutbreakDeclaredOverDate)
 		                                    END) <= 30 THEN 'medium'
 	                                    ELSE 'high'
                                     END,
                                     OutbreakDurationInDays = 
                                     CASE o.IsOutbreakDeclaredOver
 	                                    WHEN 0 THEN DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
-	                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, GETDATE())
+	                                    ELSE DATEDIFF(dd, o.OutbreakDeclaredDate, o.OutbreakDeclaredOverDate)
                                     END,
                                     IsCommentPresent = 
 	                                    CASE

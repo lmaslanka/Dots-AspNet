@@ -44,13 +44,14 @@
         [HttpPost]
         public ActionResult New(FacilityItemViewModel facilityVm)
         {
-            if (this.ModelState.IsValid)
+            using (var db = new DotsContext())
             {
-                using (var db = new DotsContext())
+                var user = GetUser(db);
+
+                if (this.ModelState.IsValid)
                 {
                     var currentDateTime = DateTime.Now;
-                    var user = GetUser(db);
-                    var facilityDb = mapper.Map<Facility>(facilityVm);
+                    var facilityDb = this.mapper.Map<Facility>(facilityVm);
 
                     facilityDb.ModifiedBy = user.Username;
                     facilityDb.ModifiedOn = currentDateTime;
@@ -63,9 +64,9 @@
 
                     return RedirectToAction("Index");
                 }
-            }
 
-            return View(facilityVm);
+                return View(facilityVm);
+            }
         }
 
         #endregion
@@ -98,25 +99,27 @@
         [HttpPost]
         public ActionResult Edit(FacilityItemViewModel facilityVm)
         {
-            if (this.ModelState.IsValid)
+            using (var db = new DotsContext())
             {
-                using (var db = new DotsContext())
+                var user = GetUser(db);
+
+                if (this.ModelState.IsValid)
                 {
+
                     var currentDateTime = DateTime.Now;
-                    var user = GetUser(db);
                     var facilityDb = db.Facilities.FirstOrDefault(u => u.RecordId == facilityVm.RecordId);
 
                     facilityDb.Name = facilityVm.Name;
                     facilityDb.ModifiedBy = user.Username;
-                    facilityDb.ModifiedOn = currentDateTime;                    
-                    
+                    facilityDb.ModifiedOn = currentDateTime;
+
                     db.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
-            }
 
-            return View(facilityVm);
+                return View(facilityVm);
+            }
         }
 
         #endregion

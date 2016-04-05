@@ -140,7 +140,7 @@
                             @Html.LabelFor(model => model.OutbreakDeclaredOverDate, htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="col-md-8">
-                            @Html.Kendo().DatePickerFor(model => model.OutbreakDeclaredOverDate)
+                            @Html.Kendo().DatePickerFor(model => model.OutbreakDeclaredOverDate).Min(new DateTime(1990, 1, 1)).Value(DateTime.Today)
                             @Html.ValidationMessageFor(model => model.OutbreakDeclaredOverDate, "", new { @class = "text-danger" })
                         </div>
                     </div>

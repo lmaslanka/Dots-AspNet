@@ -3,11 +3,11 @@ namespace dots.viewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     public class OutbreakItemEditViewModel
     {
         public long RecordId { get; set; }
-
-
+        
         [Display(Name = "Facility Name")]
         [Required]
         [StringLength(80, MinimumLength = 6)]

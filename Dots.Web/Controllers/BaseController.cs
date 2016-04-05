@@ -58,5 +58,10 @@
         {
             return this.User.Identity.IsAuthenticated ? this.User.Identity.Name.Replace(@"ACCOUNTS\", "") : "Anonymous";
         }
+
+        public BaseController()
+        {
+            UpdateUserRoleViewData("", false, false, false);
+        }
     }
 }
