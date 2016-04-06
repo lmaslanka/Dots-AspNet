@@ -142,6 +142,30 @@
                     var user = GetUser(db);
                     var outbreakItem = this.mapper.Map<Outbreak>(outbreak);
 
+                    if (outbreakItem.IsOutbreakDeclaredOver)
+                    {
+                        if (outbreakItem.OutbreakDeclaredOverDate == new DateTime(1, 1, 1, 0, 0, 0))
+                        {
+                            outbreakItem.OutbreakDeclaredOverDate = DateTime.Today;
+                        }
+                    }
+
+                    if (outbreakItem.IsAdmissionsClosed)
+                    {
+                        if (outbreakItem.AdmissionsCloseDate == new DateTime(1, 1, 1, 0, 0, 0))
+                        {
+                            outbreakItem.AdmissionsCloseDate = DateTime.Today;
+                        }
+                    }
+
+                    if (outbreakItem.IsAdmissionsOpened)
+                    {
+                        if (outbreakItem.AdmissionsOpenDate == new DateTime(1, 1, 1, 0, 0, 0))
+                        {
+                            outbreakItem.AdmissionsOpenDate = DateTime.Today;
+                        }
+                    }
+
                     outbreakItem.IsOutbreakDeclared = true;
                     outbreakItem.ModifiedBy = user.Username;
                     outbreakItem.ModifiedOn = currentDateTime;
@@ -228,6 +252,30 @@
                         outbreakItem.Comment = outbreak.Comment;
                         outbreakItem.ModifiedBy = user.Username;
                         outbreakItem.ModifiedOn = currentDateTime;
+
+                        if (outbreakItem.IsOutbreakDeclaredOver)
+                        {
+                            if (outbreakItem.OutbreakDeclaredOverDate == new DateTime(1, 1, 1, 0, 0, 0))
+                            {
+                                outbreakItem.OutbreakDeclaredOverDate = DateTime.Today;
+                            }
+                        }
+
+                        if (outbreakItem.IsAdmissionsClosed)
+                        {
+                            if (outbreakItem.AdmissionsCloseDate == new DateTime(1, 1, 1, 0, 0, 0))
+                            {
+                                outbreakItem.AdmissionsCloseDate = DateTime.Today;
+                            }
+                        }
+
+                        if (outbreakItem.IsAdmissionsOpened)
+                        {
+                            if (outbreakItem.AdmissionsOpenDate == new DateTime(1, 1, 1, 0, 0, 0))
+                            {
+                                outbreakItem.AdmissionsOpenDate = DateTime.Today;
+                            }
+                        }
 
                         db.SaveChanges();
 

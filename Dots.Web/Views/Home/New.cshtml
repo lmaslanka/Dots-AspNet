@@ -220,7 +220,7 @@
         <br />
         <div class="row">
             <div class="col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />&nbsp;&nbsp;
+                <input type="submit" value="Save" class="btn btn-primary" click="return validate()" />&nbsp;&nbsp;
                 @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
@@ -305,7 +305,7 @@
                     $('#character-count').html('Available Characters: <span class="character-count-value-red">' + (200 - count) + '</span>');
                 }
             }
-
+            
         });
     </script>
 
