@@ -4,7 +4,14 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit Outbreak</h2>
+@if (ViewBag.IsAdministrator || ViewBag.IsEditor || ViewBag.IsUpdater)
+{
+    <h2>Edit Outbreak</h2>
+}
+else
+{
+    <h2>Outbreak</h2>
+}
 
 
 @using (Html.BeginForm())
@@ -158,55 +165,58 @@
             @Html.HiddenFor(model => model.OutbreakDeclaredOverDate)
         }
 
-        <div class="row">
-            <div class="col-md-5">
-                <div class="form-group">
-                    <div class="col-md-5">
-                        @Html.LabelFor(model => model.IsAdmissionsClosed, htmlAttributes: new { @class = "control-label" })
+        @if (ViewBag.IsAdministrator || ViewBag.IsEditor || ViewBag.IsUpdater)
+        {
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            @Html.LabelFor(model => model.IsAdmissionsClosed, htmlAttributes: new {@class = "control-label"})
+                        </div>
+                        <div class="col-md-7">
+                            @Html.EditorFor(model => model.IsAdmissionsClosed)
+                            @Html.ValidationMessageFor(model => model.IsAdmissionsClosed, "", new {@class = "text-danger"})
+                        </div>
                     </div>
-                    <div class="col-md-7">
-                        @Html.EditorFor(model => model.IsAdmissionsClosed)
-                        @Html.ValidationMessageFor(model => model.IsAdmissionsClosed, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group" id="AdmissionsCloseDateGroup">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.AdmissionsCloseDate, htmlAttributes: new {@class = "control-label"})
+                        </div>
+                        <div class="col-md-8">
+                            @Html.Kendo().DatePickerFor(model => model.AdmissionsCloseDate)
+                            @Html.ValidationMessageFor(model => model.AdmissionsCloseDate, "", new {@class = "text-danger"})
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
-                <div class="form-group" id="AdmissionsCloseDateGroup">
-                    <div class="col-md-4">
-                        @Html.LabelFor(model => model.AdmissionsCloseDate, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-8">
-                        @Html.Kendo().DatePickerFor(model => model.AdmissionsCloseDate)
-                        @Html.ValidationMessageFor(model => model.AdmissionsCloseDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-5">
-                <div class="form-group">
-                    <div class="col-md-5">
-                        @Html.LabelFor(model => model.IsAdmissionsOpened, htmlAttributes: new { @class = "control-label" })
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            @Html.LabelFor(model => model.IsAdmissionsOpened, htmlAttributes: new {@class = "control-label"})
+                        </div>
+                        <div class="col-md-7">
+                            @Html.EditorFor(model => model.IsAdmissionsOpened)
+                            @Html.ValidationMessageFor(model => model.IsAdmissionsOpened, "", new {@class = "text-danger"})
+                        </div>
                     </div>
-                    <div class="col-md-7">
-                        @Html.EditorFor(model => model.IsAdmissionsOpened)
-                        @Html.ValidationMessageFor(model => model.IsAdmissionsOpened, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group" id="AdmissionsOpenDateGroup">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.AdmissionsOpenDate, htmlAttributes: new {@class = "control-label"})
+                        </div>
+                        <div class="col-md-8">
+                            @Html.Kendo().DatePickerFor(model => model.AdmissionsOpenDate)
+                            @Html.ValidationMessageFor(model => model.AdmissionsOpenDate, "", new {@class = "text-danger"})
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
-                <div class="form-group" id="AdmissionsOpenDateGroup">
-                    <div class="col-md-4">
-                        @Html.LabelFor(model => model.AdmissionsOpenDate, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-8">
-                        @Html.Kendo().DatePickerFor(model => model.AdmissionsOpenDate)
-                        @Html.ValidationMessageFor(model => model.AdmissionsOpenDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </div>
+        }
 
     @if (ViewBag.IsAdministrator || ViewBag.IsEditor)
     {
@@ -258,8 +268,11 @@
     <br />
         <div class="row">
             <div class="col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />&nbsp;&nbsp;
-                @Html.ActionLink("Back to List", "Index")
+                @if (ViewBag.IsAdministrator || ViewBag.IsEditor || ViewBag.IsUpdater)
+                {
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                }
+                &nbsp;&nbsp;@Html.ActionLink("Back to List", "Index")
             </div>
         </div>
     </div>

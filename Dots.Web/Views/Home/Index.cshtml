@@ -37,9 +37,8 @@
         string admissionsSubClassName = !outbreak.IsAdmissionsClosed ? "outbreak-item-sub-normal-text" : outbreak.IsAdmissionsOpened ? "outbreak-item-sub-normal-text" : "outbreak-item-sub-important-text";
         string admissionsSubDate = outbreak.IsAdmissionsClosed ? outbreak.IsAdmissionsOpened ? "Admissions Opened" : "Admissions Closed" : "Admissions Open";
         string declaredText = outbreak.IsOutbreakDeclaredOver ? "Outbreak Duration" : "Since Declared";
-        bool hasRole = ViewBag.IsAdministrator || ViewBag.IsEditor || ViewBag.IsUpdater;
         <div class="container outbreak-item @outbreakClassName">
-            <a href="@(hasRole ? Url.Action("Edit", new { id = outbreak.RecordId }) : "")">
+            <a href="@Url.Action("Edit", new { id = outbreak.RecordId })">
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-4 outbreak-item-main-text">@outbreak.Facility</div>
                     <div class="hidden-sm hidden-xs col-md-2 outbreak-item-main-text">@outbreakDate</div>
