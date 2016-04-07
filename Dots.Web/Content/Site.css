@@ -172,6 +172,11 @@ textarea {
     color: #aaa;
 }
 
+.no-outbreaks-text-small {
+    font-size: 1.2em;
+    color: #aaa;
+}
+
 /*
  * FORM CONTROLS
  *

@@ -209,6 +209,7 @@
     <Content Include="Content\images\outbreak_declared_over.png" />
     <Content Include="Content\images\outbreak_list.png" />
     <Content Include="Content\images\outbreak_list_item.png" />
+    <Content Include="Content\images\outbreak_list_item_comment.png" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
     <Content Include="Content\kendo\Black\indeterminate.gif" />

@@ -26,6 +26,13 @@
         </div>
     </div>
 
+    if (outbreakCounty.Outbreaks.Count == 0)
+    {
+        <br/>
+        <div class="no-outbreaks-text-small text-center">No Outbreaks for @outbreakCounty.County County</div>
+        <br />
+    }
+
     foreach (var outbreak in outbreakCounty.Outbreaks)
     {
         string outbreakClassName = outbreak.OutbreakLevel == "low" ? "outbreak-item-low" : outbreak.OutbreakLevel == "medium" ? "outbreak-item-medium" : outbreak.OutbreakLevel == "high" ? "outbreak-item-high" : outbreak.OutbreakLevel == "resolved" ? "outbreak-item-resolved" : "";
