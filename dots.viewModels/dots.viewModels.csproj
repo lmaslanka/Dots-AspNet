@@ -75,7 +75,10 @@
     <Compile Include="OutbreakItemEditViewModel.cs" />
     <Compile Include="OutbreakItemViewModel.cs" />
     <Compile Include="OutbreakListItemViewModel.cs" />
+    <Compile Include="OutbreakListReportItem.cs" />
     <Compile Include="OutbreakLocationItemViewModel.cs" />
+    <Compile Include="OutbreakReportItem.cs" />
+    <Compile Include="OutbreakReportParameters.cs" />
     <Compile Include="PathogenItemViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserItemViewModel.cs" />

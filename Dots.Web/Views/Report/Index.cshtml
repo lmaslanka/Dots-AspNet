@@ -1,0 +1,121 @@
+﻿@model List<dots.viewModels.OutbreakListReportItem>
+
+@{
+    ViewBag.Title = "Outbreaks Report";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12"><span class="h3">Outbreaks Report</span></div>
+    </div>
+
+    <hr/>
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label for="startDate" class="control-label">Start Date</label>
+                    </div>
+                    <div class="col-md-9">
+                        @(Html.Kendo().DatePicker()
+                              .Name("startDate")
+                              .Value(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1))
+                              .HtmlAttributes(new {style = "width: 100%"})
+                              )
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label for="endDate" class="control-label">End Date</label>
+                    </div>
+                    <div class="col-md-9">
+                        @(Html.Kendo().DatePicker()
+                              .Name("endDate")
+                              .Value(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1))
+                              .HtmlAttributes(new {style = "width: 100%"})
+                              )
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Update" class="btn btn-success"/>&nbsp;&nbsp;
+                @Html.ActionLink("Download", "Download", "Report", new {@onclick = "GetDateValues(this)"})
+            </div>
+        </div>
+    }
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var county in Model)
+                {
+                    <tr>
+                        <td colspan="3">
+                            <strong>@county.County</strong>
+                        </td>
+                    </tr>
+
+                    if (county.Outbreaks.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="3">
+                                <span class="">&nbsp;&nbsp;&nbsp;&nbsp;<em>No Outbreaks</em></span>
+                            </td>
+                        </tr>
+                    }
+
+                    foreach (var outbreak in county.Outbreaks)
+                    {
+                        <tr>
+                            <td>@outbreak.Facility</td>
+                            <td>@outbreak.OutbreakDeclaredDate.ToString("M")</td>
+                            @if (outbreak.OutbreakDeclaredOverDate == DateTime.MinValue)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@outbreak.OutbreakDeclaredOverDate.ToString("M")</td>
+                            }
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function GetDateValues(elem) {
+
+            var startDatePicker = $("#startDate").data("kendoDatePicker");
+            var endDatePicker = $("#endDate").data("kendoDatePicker");
+
+            var startDate = startDatePicker.value();
+            var endDate = endDatePicker.value();
+
+            var startDateString = (startDate.getMonth() + 1) + "-" + startDate.getDate() + "-" + startDate.getFullYear();
+            var endDateString = (endDate.getMonth() + 1) + "-" + endDate.getDate() + "-" + endDate.getFullYear();
+
+            $(elem).attr('href', $(elem).attr('href') + '&start=' + startDateString + '&end=' + endDateString);
+        }
+    </script>
+
+}
